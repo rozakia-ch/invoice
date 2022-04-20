@@ -17,7 +17,7 @@ class AppDrawer extends StatelessWidget {
           ),
           _drawerItem(
             icon: Icons.money,
-            text: 'Harga',
+            text: 'Paket',
             onTap: () => Navigator.pushReplacementNamed(context, "/price-page"),
           ),
           _drawerItem(

@@ -11,7 +11,7 @@ class PricePage extends StatelessWidget {
       child: Scaffold(
         endDrawer: const AppDrawer(),
         appBar: AppBar(
-          title: const Text("Harga"),
+          title: const Text("Paket"),
         ),
         body: const Center(
           child: Text("PricePage"),
