@@ -24,9 +24,10 @@ class TaxPage extends StatelessWidget {
             child: Column(
               children: [
                 NumberFormFieldWidget(
-                  text: "PPN",
+                  text: "PPN\t",
                   controller: _taxController,
                   suffixText: "%",
+                  autofocus: true,
                 ),
                 const SizedBox(height: 10.0),
                 SizedBox(

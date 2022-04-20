@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:invoice/ui/pages/home_page.dart';
 import 'package:invoice/ui/pages/note_page.dart';
-import 'package:invoice/ui/pages/price_page.dart';
+import 'package:invoice/ui/pages/paket/form_paket.dart';
+import 'package:invoice/ui/pages/paket/package_page.dart';
 import 'package:invoice/ui/pages/tax_page.dart';
 
 class AppRoutes {
@@ -10,8 +11,10 @@ class AppRoutes {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => const HomePage());
-      case '/price-page':
-        return MaterialPageRoute(builder: (_) => const PricePage());
+      case '/package-page':
+        return MaterialPageRoute(builder: (_) => const PackagePage());
+      case '/form-paket-page':
+        return MaterialPageRoute(builder: (_) => const FormPaket());
       case '/tax-page':
         return MaterialPageRoute(builder: (_) => const TaxPage());
       case '/note-page':

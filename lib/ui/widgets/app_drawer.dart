@@ -18,7 +18,8 @@ class AppDrawer extends StatelessWidget {
           _drawerItem(
             icon: Icons.money,
             text: 'Paket',
-            onTap: () => Navigator.pushReplacementNamed(context, "/price-page"),
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, "/package-page"),
           ),
           _drawerItem(
             icon: Icons.add_chart,
@@ -46,17 +47,38 @@ class AppDrawer extends StatelessWidget {
         ),
       ),
       child: Stack(
-        children: const [
+        children: [
           Positioned(
             bottom: 12.0,
             left: 16.0,
-            child: Text(
-              "Invoice App",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w500,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Invoice App",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                RichText(
+                  text: const TextSpan(
+                    text: 'Created By: ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Rozakia',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
