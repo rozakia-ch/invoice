@@ -7,14 +7,29 @@ class NotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _noteController = TextEditingController();
     return AppWillPopScope(
       child: Scaffold(
         endDrawer: const AppDrawer(),
         appBar: AppBar(
+          elevation: 0,
           title: const Text("Note"),
         ),
-        body: const Center(
-          child: Text("NotePage"),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(10.0),
+          child: TextFormField(
+            autofocus: true,
+            controller: _noteController,
+            keyboardType: TextInputType.multiline,
+            textAlignVertical: TextAlignVertical.top,
+            maxLines: 50,
+            decoration: const InputDecoration(
+              alignLabelWithHint: true,
+              contentPadding: EdgeInsets.all(10.0),
+              border: InputBorder.none,
+              hintText: 'Ketik disini',
+            ),
+          ),
         ),
       ),
     );

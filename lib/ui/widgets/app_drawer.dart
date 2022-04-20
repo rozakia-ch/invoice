@@ -16,17 +16,17 @@ class AppDrawer extends StatelessWidget {
             onTap: () => Navigator.pushReplacementNamed(context, "/"),
           ),
           _drawerItem(
-            icon: Icons.group,
+            icon: Icons.money,
             text: 'Harga',
             onTap: () => Navigator.pushReplacementNamed(context, "/price-page"),
           ),
           _drawerItem(
-            icon: Icons.taxi_alert,
+            icon: Icons.add_chart,
             text: 'PPN',
             onTap: () => Navigator.pushReplacementNamed(context, "/tax-page"),
           ),
           _drawerItem(
-            icon: Icons.access_time,
+            icon: Icons.note,
             text: 'Note',
             onTap: () => Navigator.pushReplacementNamed(context, "/note-page"),
           ),
