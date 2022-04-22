@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:invoice/ui/pages/home_page.dart';
 import 'package:invoice/ui/pages/note_page.dart';
-import 'package:invoice/ui/pages/paket/form_paket.dart';
-import 'package:invoice/ui/pages/paket/package_page.dart';
+import 'package:invoice/ui/pages/package/package_form.dart';
+import 'package:invoice/ui/pages/package/package_page.dart';
 import 'package:invoice/ui/pages/tax_page.dart';
 
 class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // Map? args = settings.arguments as Map?;
+    Map? args = settings.arguments as Map?;
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => const HomePage());
       case '/package-page':
         return MaterialPageRoute(builder: (_) => const PackagePage());
-      case '/form-paket-page':
-        return MaterialPageRoute(builder: (_) => const FormPaket());
+      case '/form-package-page':
+        return MaterialPageRoute(builder: (_) => PackageForm(args: args));
       case '/tax-page':
         return MaterialPageRoute(builder: (_) => const TaxPage());
       case '/note-page':

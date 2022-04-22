@@ -15,24 +15,10 @@ class TaxLoading extends TaxState {
   List<Object?> get props => [];
 }
 
-// edit taxes
-class EditTaxState extends TaxState {
-  final TaxModel tax;
-  const EditTaxState({required this.tax});
-  @override
-  List<Object?> get props => [];
-}
-
 //  your taxes
 class ListTaxState extends TaxState {
   final List<TaxModel> taxes; // get all taxes
   const ListTaxState({required this.taxes});
-  @override
-  List<Object?> get props => [];
-}
-
-// new tax
-class NewTaxState extends TaxState {
   @override
   List<Object?> get props => [];
 }

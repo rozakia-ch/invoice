@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:invoice/cubits/note/note_cubit.dart';
+import 'package:invoice/cubits/package/package_cubit.dart';
 import 'package:invoice/cubits/tax/tax_cubit.dart';
+import 'package:invoice/models/package/package_model.dart';
 import 'package:invoice/models/tax/tax_model.dart';
 import 'package:invoice/ui/pages/home_page.dart';
 import 'package:invoice/ui/routes/app_router.dart';
@@ -14,6 +16,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter<NoteModel>(NoteModelAdapter());
   Hive.registerAdapter<TaxModel>(TaxModelAdapter());
+  Hive.registerAdapter<PackageModel>(PackageModelAdapter());
   runApp(
     MultiBlocProvider(
       providers: [
@@ -24,6 +27,10 @@ void main() async {
         BlocProvider(
           lazy: false,
           create: (context) => TaxCubit()..mapInitial(),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => PackageCubit()..mapInitial(),
         )
       ],
       child: const MyApp(),

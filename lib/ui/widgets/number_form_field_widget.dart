@@ -9,6 +9,7 @@ class NumberFormFieldWidget extends StatelessWidget {
     this.suffixText,
     this.autofocus = false,
     this.prefixText,
+    this.currency,
   }) : super(key: key);
 
   final String text;
@@ -16,8 +17,15 @@ class NumberFormFieldWidget extends StatelessWidget {
   final String? prefixText;
   final String? suffixText;
   final bool autofocus;
+  final TextInputFormatter? currency;
   @override
   Widget build(BuildContext context) {
+    List<TextInputFormatter> _inputFormatter = [
+      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+    ];
+    if (currency != null) {
+      _inputFormatter.add(currency!);
+    }
     return TextFormField(
       // The validator receives the text that the user has entered.
       validator: (value) {
@@ -27,7 +35,7 @@ class NumberFormFieldWidget extends StatelessWidget {
         return null;
       },
       keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+      inputFormatters: _inputFormatter,
       autofocus: autofocus,
       textAlign: TextAlign.end,
       controller: controller,
