@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice/constants/constants.dart';
 import 'package:invoice/cubits/package/package_cubit.dart';
@@ -45,7 +44,7 @@ class PackagePage extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 10.0),
                       child: ListTile(
                         title: Text(
-                          '${_package.package} mbps',
+                          '${_package.package} Mbps',
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         subtitle: Text(
@@ -74,7 +73,7 @@ class PackagePage extends StatelessWidget {
                           _showAlertDialog(
                             context,
                             index,
-                            '${_package.package} mpbs',
+                            '${_package.package} Mbps',
                           );
                         },
                       ),

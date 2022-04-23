@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
+typedef OnChangeCallback = void Function(dynamic value);
+
 class TextFormFieldWidget extends StatelessWidget {
   const TextFormFieldWidget({
     Key? key,
     required this.text,
     required this.controller,
+    this.onChanged,
   }) : super(key: key);
   final String text;
   final TextEditingController controller;
+  final OnChangeCallback? onChanged;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -18,7 +22,9 @@ class TextFormFieldWidget extends StatelessWidget {
         }
         return null;
       },
+      autocorrect: false,
       controller: controller,
+      onChanged: onChanged,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         hintText: text,

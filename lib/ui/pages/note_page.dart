@@ -54,6 +54,7 @@ class _NotePageState extends State<NotePage> {
                             BlocProvider.of<NoteCubit>(context).mapNoteAdd(
                               note: value,
                             );
+                            _note = value;
                           } else {
                             BlocProvider.of<NoteCubit>(context).mapNoteEdit(
                               index: 0,
@@ -73,7 +74,7 @@ class _NotePageState extends State<NotePage> {
                 ),
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return Container();
             }
           },
         ),

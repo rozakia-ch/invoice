@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:invoice/cubits/company/company_cubit.dart';
 import 'package:invoice/cubits/note/note_cubit.dart';
 import 'package:invoice/cubits/package/package_cubit.dart';
 import 'package:invoice/cubits/tax/tax_cubit.dart';
+import 'package:invoice/models/company/company_model.dart';
+import 'package:invoice/models/note/note_model.dart';
 import 'package:invoice/models/package/package_model.dart';
 import 'package:invoice/models/tax/tax_model.dart';
-import 'package:invoice/ui/pages/home_page.dart';
+import 'package:invoice/ui/pages/home/home_page.dart';
 import 'package:invoice/ui/routes/app_router.dart';
-
-import 'models/note/note_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  Hive.registerAdapter<CompanyModel>(CompanyModelAdapter());
   Hive.registerAdapter<NoteModel>(NoteModelAdapter());
   Hive.registerAdapter<TaxModel>(TaxModelAdapter());
   Hive.registerAdapter<PackageModel>(PackageModelAdapter());
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider(
+          lazy: false,
+          create: (context) => CompanyCubit()..mapInitial(),
+        ),
         BlocProvider(
           lazy: false,
           create: (context) => NoteCubit()..mapInitial(),

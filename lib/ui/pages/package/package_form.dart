@@ -47,7 +47,7 @@ class _PackageFormState extends State<PackageForm> {
                   autofocus: true,
                   text: "Paket\t",
                   controller: _paketController,
-                  suffixText: "mbps",
+                  suffixText: "Mbps",
                 ),
                 const SizedBox(height: 10.0),
                 NumberFormFieldWidget(
