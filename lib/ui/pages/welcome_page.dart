@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice/cubits/company/company_cubit.dart';
 import 'package:invoice/cubits/note/note_cubit.dart';
@@ -35,22 +36,39 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text('Invoice App'),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/home-page');
-                },
-                child: const Text("Lanjutkan"),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Invoice App',
+              style: TextStyle(
+                fontSize: 36.0,
+                fontWeight: FontWeight.w700,
               ),
-            ],
-          ),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontSize: 24,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/home-page');
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text("Lanjutkan"),
+                  SizedBox(width: 5.0),
+                  Icon(Icons.arrow_forward),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
