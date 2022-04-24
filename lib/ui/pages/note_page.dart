@@ -50,17 +50,10 @@ class _NotePageState extends State<NotePage> {
                         textAlignVertical: TextAlignVertical.top,
                         maxLines: 50,
                         onChanged: (value) {
-                          if (_note == '') {
-                            BlocProvider.of<NoteCubit>(context).mapNoteAdd(
-                              note: value,
-                            );
-                            _note = value;
-                          } else {
-                            BlocProvider.of<NoteCubit>(context).mapNoteEdit(
-                              index: 0,
-                              newNote: value,
-                            );
-                          }
+                          BlocProvider.of<NoteCubit>(context).mapNoteEdit(
+                            index: 0,
+                            newNote: value,
+                          );
                         },
                         decoration: const InputDecoration(
                           alignLabelWithHint: true,

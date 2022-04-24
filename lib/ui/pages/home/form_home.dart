@@ -43,6 +43,7 @@ class _FormHomeState extends State<FormHome> {
           TextFormFieldWidget(
             text: "Alamat",
             controller: _addressController,
+            maxLines: 3,
           ),
           const SizedBox(height: 10.0),
           BlocBuilder<PackageCubit, PackageState>(

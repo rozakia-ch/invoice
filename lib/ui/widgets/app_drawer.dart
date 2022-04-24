@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
           _drawerItem(
             icon: Icons.home,
             text: 'Beranda',
-            onTap: () => Navigator.pushReplacementNamed(context, "/"),
+            onTap: () => Navigator.pushReplacementNamed(context, "/home-page"),
           ),
           _drawerItem(
             icon: Icons.money,

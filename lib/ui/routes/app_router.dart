@@ -10,7 +10,7 @@ class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     Map? args = settings.arguments as Map?;
     switch (settings.name) {
-      case '/':
+      case '/home-page':
         return MaterialPageRoute(builder: (_) => const HomePage());
       case '/checkout-page':
         return MaterialPageRoute(builder: (_) => CheckOutPage(args: args));

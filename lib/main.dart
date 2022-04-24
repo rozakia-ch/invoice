@@ -9,7 +9,7 @@ import 'package:invoice/models/company/company_model.dart';
 import 'package:invoice/models/note/note_model.dart';
 import 'package:invoice/models/package/package_model.dart';
 import 'package:invoice/models/tax/tax_model.dart';
-import 'package:invoice/ui/pages/home/home_page.dart';
+import 'package:invoice/ui/pages/welcome_page.dart';
 import 'package:invoice/ui/routes/app_router.dart';
 
 void main() async {
@@ -19,6 +19,7 @@ void main() async {
   Hive.registerAdapter<NoteModel>(NoteModelAdapter());
   Hive.registerAdapter<TaxModel>(TaxModelAdapter());
   Hive.registerAdapter<PackageModel>(PackageModelAdapter());
+
   runApp(
     MultiBlocProvider(
       providers: [
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const WelcomePage(),
     );
   }
 }

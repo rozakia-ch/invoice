@@ -28,17 +28,10 @@ class CompanyWidget extends StatelessWidget {
             text: "Nama Perusahaan",
             controller: controller,
             onChanged: (value) {
-              if (_company == '') {
-                _company = value;
-                BlocProvider.of<CompanyCubit>(context).mapCompanyAdd(
-                  company: value,
-                );
-              } else {
-                BlocProvider.of<CompanyCubit>(context).mapCompanyEdit(
-                  index: 0,
-                  newCompany: value,
-                );
-              }
+              BlocProvider.of<CompanyCubit>(context).mapCompanyEdit(
+                index: 0,
+                newCompany: value,
+              );
             },
           );
         } else {

@@ -8,10 +8,12 @@ class TextFormFieldWidget extends StatelessWidget {
     required this.text,
     required this.controller,
     this.onChanged,
+    this.maxLines,
   }) : super(key: key);
   final String text;
   final TextEditingController controller;
   final OnChangeCallback? onChanged;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -22,6 +24,7 @@ class TextFormFieldWidget extends StatelessWidget {
         }
         return null;
       },
+      maxLines: maxLines,
       autocorrect: false,
       controller: controller,
       onChanged: onChanged,
