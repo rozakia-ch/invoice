@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:invoice/cubits/company/company_cubit.dart';
 import 'package:invoice/cubits/note/note_cubit.dart';
 import 'package:invoice/cubits/package/package_cubit.dart';
+import 'package:invoice/cubits/printer/printer_cubit.dart';
 import 'package:invoice/cubits/tax/tax_cubit.dart';
 import 'package:invoice/models/company/company_model.dart';
 import 'package:invoice/models/note/note_model.dart';
@@ -38,6 +39,10 @@ void main() async {
         BlocProvider(
           lazy: false,
           create: (context) => PackageCubit()..mapInitial(),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => PrinterCubit()..mapInitial(),
         )
       ],
       child: const MyApp(),

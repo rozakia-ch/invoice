@@ -1,7 +1,8 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice/constants/constants.dart';
+import 'package:invoice/cubits/printer/printer_cubit.dart';
 import 'package:invoice/hive/note_hive.dart';
 import 'package:invoice/hive/tax_hive.dart';
 import 'package:invoice/ui/pages/home/check_out_item.dart';
@@ -20,17 +21,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
   final TaxHive _taxHive = TaxHive();
   final NoteHive _noteHive = NoteHive();
   final _formKey = GlobalKey<FormState>();
-  BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
-  List<BluetoothDevice> _devices = [];
-  BluetoothDevice? _device;
-  bool _connected = false;
   double tax = 0.0;
   String note = '';
 
   @override
   void initState() {
     _getNote();
-    _getDevicesItems();
     super.initState();
   }
 
@@ -91,42 +87,44 @@ class _CheckOutPageState extends State<CheckOutPage> {
               ),
               CheckOutItem(
                 title: 'Hutang:',
-                value: CurrencyFormat.convertToIdr(
-                    int.parse(widget.args!['debt']), 0),
+                value: widget.args!['debt'],
               ),
               const SizedBox(height: 5.0),
               CheckOutTotal(
-                  debt: int.parse(widget.args!['debt']), price: _price),
+                  debt: int.parse(widget.args!['debt'].replaceAll('.', '')),
+                  price: _price),
               const SizedBox(height: 10.0),
-              DropdownButtonFormField<BluetoothDevice>(
-                items: _devices
-                    .map((e) => DropdownMenuItem(
-                          child: Text(e.name!),
-                          value: e,
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _device = value;
-                    _connected = true;
-                  });
-                  bluetooth.isConnected.then((isConnected) {
-                    bluetooth.connect(_device!);
-                  });
-                },
-                value: _device,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintStyle: TextStyle(color: Colors.grey[800]),
-                  hintText: "Pilih Printer",
-                  fillColor: Colors.blue[200],
-                ),
-                validator: (value) {
-                  if (value == null) {
-                    return 'Printer belum dipilih';
+              BlocBuilder<PrinterCubit, PrinterState>(
+                builder: (context, state) {
+                  if (state is MyPrinterState) {
+                    return DropdownButtonFormField<BluetoothDevice>(
+                      items: state.devices
+                          .map((e) => DropdownMenuItem(
+                                child: Text(e.name!),
+                                value: e,
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        BlocProvider.of<PrinterCubit>(context).connect(value);
+                      },
+                      value: state.device,
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintStyle: TextStyle(color: Colors.grey[800]),
+                        hintText: "Pilih Printer",
+                        fillColor: Colors.blue[200],
+                      ),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Printer belum dipilih';
+                        }
+                        return null;
+                      },
+                    );
+                  } else {
+                    return Container();
                   }
-                  return null;
                 },
               ),
               const SizedBox(height: 10.0),
@@ -134,33 +132,33 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 text: 'Refresh Printer',
                 icon: Icons.refresh,
                 onPressed: () {
-                  _getDevicesItems();
+                  BlocProvider.of<PrinterCubit>(context).mapInitial();
                 },
               ),
               const SizedBox(height: 10.0),
               ElevationButtonWidget(
                 text: 'Print',
                 icon: Icons.print,
-                onPressed: _connected
-                    ? () {
-                        if (_formKey.currentState!.validate()) {
-                          // ScaffoldMessenger.of(context).showSnackBar(
-                          //   SnackBar(content: Text("Processing")),
-                          // );
-                          _printReceipt(
-                            company: widget.args!['company'],
-                            name: widget.args!['name'],
-                            address: widget.args!['address'],
-                            package: _package,
-                            price: _price,
-                            debt: int.parse(widget.args!['debt']),
-                            month: widget.args!['month'],
-                            year: widget.args!['year'],
-                          );
-                        }
-                      }
-                    // ignore: avoid_returning_null_for_void
-                    : () => null,
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(content: Text("Processing")),
+                    // );
+                    BlocProvider.of<PrinterCubit>(context).printReceipt(
+                      company: widget.args!['company'],
+                      name: widget.args!['name'],
+                      address: widget.args!['address'],
+                      package: _package,
+                      price: _price,
+                      debt: int.parse(widget.args!['debt'].replaceAll('.', '')),
+                      month: widget.args!['month'],
+                      year: widget.args!['year'],
+                      tax: tax,
+                      note: note,
+                    );
+                    Navigator.pushReplacementNamed(context, '/home-page');
+                  }
+                },
               ),
             ],
           ),
@@ -184,66 +182,5 @@ class _CheckOutPageState extends State<CheckOutPage> {
     String price = value[1];
     String price1 = price.replaceAll('.', '');
     return [value[0], price1];
-  }
-
-  // BLueThermal
-  _getDevicesItems() async {
-    _devices = await bluetooth.getBondedDevices();
-    setState(() {});
-  }
-
-  void _printReceipt({
-    required String company,
-    required String name,
-    required String address,
-    required String package,
-    required int price,
-    required int debt,
-    required String month,
-    required String year,
-  }) {
-    bluetooth.isConnected.then((isConnected) {
-      if (isConnected != null) {
-        bluetooth.printNewLine();
-        bluetooth.printCustom(company, 3, 1);
-        bluetooth.printLeftRight(
-          DateFormat(dateFormat).format(DateTime.now()),
-          DateFormat(timeFormat).format(DateTime.now()),
-          1,
-        );
-        bluetooth.printNewLine();
-        bluetooth.printLeftRight('Nama', name, 1);
-        bluetooth.printCustom('Alamat: $address', 1, 0);
-        bluetooth.printLeftRight('Broadband', package.trim(), 1);
-        bluetooth.printLeftRight('Jatuh Tempo', '$month $year', 1);
-        bluetooth.printLeftRight(
-          'Harga',
-          CurrencyFormat.convertToIdr(price, 0),
-          1,
-        );
-        bluetooth.printLeftRight(
-          'PPN ($tax%)',
-          CurrencyFormat.convertToIdr(tax / 100 * price, 0),
-          1,
-        );
-        bluetooth.printLeftRight(
-          'Hutang',
-          CurrencyFormat.convertToIdr(debt, 0),
-          1,
-        );
-        bluetooth.printLeftRight(
-          'Total',
-          CurrencyFormat.convertToIdr(
-              tax > 0 ? tax / 100 * price + price + debt : price + price + debt,
-              0),
-          1,
-        );
-        bluetooth.printNewLine();
-        bluetooth.printCustom(note, 1, 0);
-        bluetooth.printNewLine();
-        bluetooth.printNewLine();
-        bluetooth.paperCut();
-      }
-    });
   }
 }
