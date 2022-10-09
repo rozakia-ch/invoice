@@ -21,10 +21,10 @@ class DropdownWidget extends StatefulWidget {
 class _DropdownWidgetState extends State<DropdownWidget> {
   @override
   Widget build(BuildContext context) {
-    String? _dropDownValue = widget.value;
+    String? dropDownValue = widget.value;
     return DropdownButtonFormField<String>(
       icon: const Icon(Icons.arrow_downward),
-      value: _dropDownValue,
+      value: dropDownValue,
       // elevation: 16,
       isExpanded: true,
       decoration: InputDecoration(
@@ -41,7 +41,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
       }).toList(),
       onChanged: (value) {
         setState(() {
-          _dropDownValue = value;
+          dropDownValue = value;
         });
         widget.onChanged(value);
       },

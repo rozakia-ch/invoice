@@ -19,8 +19,12 @@ class PrinterCubit extends Cubit<PrinterState> {
 
   void connect(device) async {
     emit(PrinterLoadingState());
-    connectedDevice = device;
-    bluetooth.connect(connectedDevice!);
+    bluetooth.isConnected.then((isConnected) {
+      if (!isConnected!) {
+        bluetooth.connect(device);
+        connectedDevice = device;
+      }
+    });
     emit(MyPrinterState(devices: devices, device: connectedDevice));
   }
 
@@ -35,9 +39,11 @@ class PrinterCubit extends Cubit<PrinterState> {
     required String year,
     required String note,
     required double tax,
+    required int rentCost,
+    required int discount,
   }) {
     bluetooth.isConnected.then((isConnected) {
-      if (isConnected != null) {
+      if (isConnected!) {
         bluetooth.printNewLine();
         bluetooth.printCustom(company, 4, 1);
         bluetooth.printLeftRight(
@@ -60,15 +66,34 @@ class PrinterCubit extends Cubit<PrinterState> {
           CurrencyFormat.convertToIdr(tax / 100 * price, 0),
           1,
         );
-        bluetooth.printLeftRight(
-          'Hutang',
-          CurrencyFormat.convertToIdr(debt, 0),
-          1,
-        );
+        if (debt > 0) {
+          bluetooth.printLeftRight(
+            'Hutang',
+            CurrencyFormat.convertToIdr(debt, 0),
+            1,
+          );
+        }
+        if (rentCost > 0) {
+          bluetooth.printLeftRight(
+            'Biaya Sewa',
+            CurrencyFormat.convertToIdr(rentCost, 0),
+            1,
+          );
+        }
+        if (discount > 0) {
+          bluetooth.printLeftRight(
+            'Diskon',
+            CurrencyFormat.convertToIdr(discount, 0),
+            1,
+          );
+        }
         bluetooth.printLeftRight(
           'Total',
           CurrencyFormat.convertToIdr(
-              tax > 0 ? tax / 100 * price + price + debt : price + debt, 0),
+              tax > 0
+                  ? (tax / 100 * price) + price + debt + rentCost - discount
+                  : price + debt + rentCost - discount,
+              0),
           1,
         );
         bluetooth.printNewLine();

@@ -20,11 +20,11 @@ class NumberFormFieldWidget extends StatelessWidget {
   final TextInputFormatter? currency;
   @override
   Widget build(BuildContext context) {
-    List<TextInputFormatter> _inputFormatter = [
+    List<TextInputFormatter> inputFormatter = [
       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
     ];
     if (currency != null) {
-      _inputFormatter.add(currency!);
+      inputFormatter.add(currency!);
     }
     return TextFormField(
       // The validator receives the text that the user has entered.
@@ -35,7 +35,7 @@ class NumberFormFieldWidget extends StatelessWidget {
         return null;
       },
       keyboardType: TextInputType.number,
-      inputFormatters: _inputFormatter,
+      inputFormatters: inputFormatter,
       autofocus: autofocus,
       textAlign: TextAlign.end,
       controller: controller,
@@ -44,6 +44,7 @@ class NumberFormFieldWidget extends StatelessWidget {
         hintText: text,
         prefixText: prefixText,
         suffixText: suffixText,
+        labelText: text,
       ),
     );
   }

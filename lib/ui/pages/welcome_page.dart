@@ -25,9 +25,12 @@ class _WelcomePageState extends State<WelcomePage> {
     final bool? setup = prefs.getBool('setup');
     if (setup == null) {
       prefs.setBool('setup', true);
+      // ignore: use_build_context_synchronously
       BlocProvider.of<CompanyCubit>(context).mapCompanyAdd(company: '');
+      // ignore: use_build_context_synchronously
       BlocProvider.of<NoteCubit>(context).mapNoteAdd(note: '');
     } else {
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, '/home-page');
     }
   }

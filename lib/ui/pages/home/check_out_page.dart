@@ -32,8 +32,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   @override
   Widget build(BuildContext context) {
-    final int _price = int.parse(_getPackage(widget.args!['package'])[1]);
-    final String _package = _getPackage(widget.args!['package'])[0];
+    final String company = widget.args!['company'];
+    final String name = widget.args!['name'];
+    final String address = widget.args!['address'];
+    final int price = int.parse(_getPackage(widget.args!['package'])[1]);
+    final String package = _getPackage(widget.args!['package'])[0];
+    final String debt = widget.args!['debt'].replaceAll('.', '');
+    final String rentCost = widget.args!['rentCost'].replaceAll('.', '');
+    final String discount = widget.args!['discount'].replaceAll('.', '');
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -47,35 +54,35 @@ class _CheckOutPageState extends State<CheckOutPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                widget.args!['company'],
+                company,
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 5.0),
-              CheckOutItem(title: 'Nama:', value: widget.args!['name']),
+              CheckOutItem(title: 'Nama:', value: name),
               const SizedBox(height: 5.0),
-              CheckOutItem(title: 'Alamat:', value: widget.args!['address']),
+              CheckOutItem(title: 'Alamat:', value: address),
               const SizedBox(height: 5.0),
-              CheckOutItem(title: 'BroadBand:', value: _package),
+              CheckOutItem(title: 'BroadBand:', value: package),
               const SizedBox(height: 5.0),
               CheckOutItem(
                 title: 'Harga:',
-                value: CurrencyFormat.convertToIdr(_price, 0),
+                value: CurrencyFormat.convertToIdr(price, 0),
               ),
               const SizedBox(height: 5.0),
               FutureBuilder<double>(
                 future: _getTax(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    double _tax = snapshot.data!;
-                    double _priceTax = _tax / 100 * _price;
+                    double tax = snapshot.data!;
+                    double priceTax = tax / 100 * price;
                     return Column(
                       children: [
                         CheckOutItem(
-                          title: 'PPN ($_tax%):',
-                          value: CurrencyFormat.convertToIdr(_priceTax, 0),
+                          title: 'PPN ($tax%):',
+                          value: CurrencyFormat.convertToIdr(priceTax, 0),
                         ),
                         const SizedBox(height: 5.0),
                       ],
@@ -87,12 +94,24 @@ class _CheckOutPageState extends State<CheckOutPage> {
               ),
               CheckOutItem(
                 title: 'Hutang:',
-                value: widget.args!['debt'],
+                value: CurrencyFormat.convertToIdr(int.parse(debt), 0),
+              ),
+              const SizedBox(height: 5.0),
+              CheckOutItem(
+                title: 'Biaya Sewa:',
+                value: CurrencyFormat.convertToIdr(int.parse(rentCost), 0),
+              ),
+              const SizedBox(height: 5.0),
+              CheckOutItem(
+                title: 'Diskon:',
+                value: CurrencyFormat.convertToIdr(int.parse(discount), 0),
               ),
               const SizedBox(height: 5.0),
               CheckOutTotal(
-                  debt: int.parse(widget.args!['debt'].replaceAll('.', '')),
-                  price: _price),
+                  debt: int.parse(debt),
+                  price: price,
+                  rentCost: int.parse(rentCost),
+                  discount: int.parse(discount)),
               const SizedBox(height: 10.0),
               BlocBuilder<PrinterCubit, PrinterState>(
                 builder: (context, state) {
@@ -100,8 +119,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     return DropdownButtonFormField<BluetoothDevice>(
                       items: state.devices
                           .map((e) => DropdownMenuItem(
-                                child: Text(e.name!),
                                 value: e,
+                                child: Text(e.name!),
                               ))
                           .toList(),
                       onChanged: (value) {
@@ -141,20 +160,26 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 icon: Icons.print,
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   SnackBar(content: Text("Processing")),
-                    // );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Processing: $company, $name, $address, $package, $price, $debt, ",
+                        ),
+                      ),
+                    );
                     BlocProvider.of<PrinterCubit>(context).printReceipt(
-                      company: widget.args!['company'],
-                      name: widget.args!['name'],
-                      address: widget.args!['address'],
-                      package: _package,
-                      price: _price,
-                      debt: int.parse(widget.args!['debt'].replaceAll('.', '')),
+                      company: company,
+                      name: name,
+                      address: address,
+                      package: package,
+                      price: price,
+                      debt: int.parse(debt),
                       month: widget.args!['month'],
                       year: widget.args!['year'],
                       tax: tax,
                       note: note,
+                      rentCost: int.parse(rentCost),
+                      discount: int.parse(discount),
                     );
                     Navigator.pushReplacementNamed(context, '/home-page');
                   }

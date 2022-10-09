@@ -9,9 +9,14 @@ class CheckOutTotal extends StatelessWidget {
     Key? key,
     required this.debt,
     required this.price,
+    required this.rentCost,
+    required this.discount,
   }) : super(key: key);
   final int debt;
   final int price;
+  final int rentCost;
+  final int discount;
+
   Future<double> _getTax() async {
     double tax = 0.0;
     await _taxHive.getFullTaxs().then((value) => tax = value.first.tax);
@@ -24,14 +29,16 @@ class CheckOutTotal extends StatelessWidget {
       future: _getTax(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          double _tax = snapshot.data!;
-          double _priceTax = _tax / 100 * price;
+          double tax = snapshot.data!;
+          double priceTax = tax / 100 * price;
           return CheckOutItemTotal(
-            value: CurrencyFormat.convertToIdr(debt + price + _priceTax, 0),
+            value: CurrencyFormat.convertToIdr(
+                debt + price + priceTax + rentCost - discount, 0),
           );
         } else {
           return CheckOutItemTotal(
-            value: CurrencyFormat.convertToIdr(debt + price, 0),
+            value: CurrencyFormat.convertToIdr(
+                debt + price + rentCost - discount, 0),
           );
         }
       },

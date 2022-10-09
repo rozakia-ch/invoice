@@ -18,31 +18,33 @@ class FormHome extends StatefulWidget {
 class _FormHomeState extends State<FormHome> {
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final _companyController = TextEditingController();
-    final _nameController = TextEditingController();
-    final _addressController = TextEditingController();
-    final _debtController = TextEditingController();
-    String? _packageValue;
+    final formKey = GlobalKey<FormState>();
+    final companyController = TextEditingController();
+    final nameController = TextEditingController();
+    final addressController = TextEditingController();
+    final debtController = TextEditingController();
+    final discountController = TextEditingController();
+    final rentCostController = TextEditingController();
+    String? packageValue;
     // Month Year
-    final int _currentYear = DateTime.now().year.toInt();
-    final int _currentMonth = DateTime.now().month.toInt();
-    String _monthValue = nameMonth[_currentMonth - 1];
-    String _yearValue = _currentYear.toString();
+    final int currentYear = DateTime.now().year.toInt();
+    final int currentMonth = DateTime.now().month.toInt();
+    String monthValue = nameMonth[currentMonth - 1];
+    String yearValue = currentYear.toString();
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Column(
         children: [
-          CompanyWidget(controller: _companyController),
+          CompanyWidget(controller: companyController),
           const SizedBox(height: 10.0),
           TextFormFieldWidget(
             text: "Nama Klien",
-            controller: _nameController,
+            controller: nameController,
           ),
           const SizedBox(height: 10.0),
           TextFormFieldWidget(
             text: "Alamat",
-            controller: _addressController,
+            controller: addressController,
             maxLines: 3,
           ),
           const SizedBox(height: 10.0),
@@ -58,7 +60,7 @@ class _FormHomeState extends State<FormHome> {
                               '${state.packages[index].package} Mbps - ${CurrencyFormat.convertToIdr(state.packages[index].price, 0)}',
                         )
                       : [],
-                  onChanged: (value) => _packageValue = value,
+                  onChanged: (value) => packageValue = value,
                 );
               } else {
                 return Container();
@@ -72,19 +74,19 @@ class _FormHomeState extends State<FormHome> {
               Expanded(
                 child: DropdownWidget(
                   text: "Bulan",
-                  value: _monthValue,
+                  value: monthValue,
                   items: nameMonth,
-                  onChanged: (value) => _monthValue = value,
+                  onChanged: (value) => monthValue = value,
                 ),
               ),
               const SizedBox(width: 10.0),
               Expanded(
                 child: DropdownWidget(
                   text: "Tahun",
-                  value: _yearValue,
+                  value: yearValue,
                   items: List<String>.generate(
-                      3, (i) => (_currentYear - i).toString()),
-                  onChanged: (value) => _yearValue = value,
+                      3, (i) => (currentYear - i).toString()),
+                  onChanged: (value) => yearValue = value,
                 ),
               ),
             ],
@@ -92,7 +94,29 @@ class _FormHomeState extends State<FormHome> {
           const SizedBox(height: 10.0),
           NumberFormFieldWidget(
             text: "Kurangan Bulan Lalu",
-            controller: _debtController,
+            controller: debtController..text = "0",
+            prefixText: 'Rp.',
+            currency: CurrencyTextInputFormatter(
+              name: '',
+              locale: 'id',
+              decimalDigits: 0,
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          NumberFormFieldWidget(
+            text: "Biaya Sewa",
+            controller: rentCostController..text = "0",
+            prefixText: 'Rp.',
+            currency: CurrencyTextInputFormatter(
+              name: '',
+              locale: 'id',
+              decimalDigits: 0,
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          NumberFormFieldWidget(
+            text: "Diskon",
+            controller: discountController..text = "0",
             prefixText: 'Rp.',
             currency: CurrencyTextInputFormatter(
               name: '',
@@ -116,15 +140,17 @@ class _FormHomeState extends State<FormHome> {
               ),
               onPressed: () {
                 // Validate returns true if the form is valid, or false otherwise.
-                if (_formKey.currentState!.validate()) {
+                if (formKey.currentState!.validate()) {
                   Navigator.pushNamed(context, '/checkout-page', arguments: {
-                    'company': _companyController.text,
-                    'name': _nameController.text,
-                    'address': _addressController.text,
-                    'package': _packageValue,
-                    'year': _yearValue,
-                    'month': _monthValue,
-                    'debt': _debtController.text,
+                    'company': companyController.text,
+                    'name': nameController.text,
+                    'address': addressController.text,
+                    'package': packageValue,
+                    'year': yearValue,
+                    'month': monthValue,
+                    'debt': debtController.text,
+                    'discount': discountController.text,
+                    'rentCost': rentCostController.text
                   });
                 }
               },

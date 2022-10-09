@@ -19,11 +19,11 @@ class _PackageFormState extends State<PackageForm> {
   bool elevatedBtnState = true;
   @override
   Widget build(BuildContext context) {
-    final bool _newEntry = widget.args!['newEntry'];
-    if (!_newEntry) {
-      final PackageModel _package = widget.args!['package'];
-      _paketController.text = _package.package;
-      _priceController.text = _package.price.toString();
+    final bool newEntry = widget.args!['newEntry'];
+    if (!newEntry) {
+      final PackageModel package = widget.args!['package'];
+      _paketController.text = package.package;
+      _priceController.text = package.price.toString();
     }
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +78,7 @@ class _PackageFormState extends State<PackageForm> {
                         ? () {
                             // Validate returns true if the form is valid, or false otherwise.
                             if (_formKey.currentState!.validate()) {
-                              if (_newEntry) {
+                              if (newEntry) {
                                 BlocProvider.of<PackageCubit>(context)
                                     .mapPackageAdd(
                                   package: _paketController.text,

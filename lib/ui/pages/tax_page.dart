@@ -10,8 +10,8 @@ class TaxPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final _taxController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    final taxController = TextEditingController();
     return AppWillPopScope(
       child: Scaffold(
         endDrawer: const AppDrawer(),
@@ -22,20 +22,20 @@ class TaxPage extends StatelessWidget {
         body: BlocBuilder<TaxCubit, TaxState>(
           builder: (context, state) {
             if (state is ListTaxState) {
-              String _tax = state.taxes.isNotEmpty
+              String tax = state.taxes.isNotEmpty
                   ? state.taxes.first.tax.toString()
                   : '';
-              _taxController.text = _tax;
+              taxController.text = tax;
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
                     vertical: 20.0, horizontal: 10.0),
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     children: [
                       NumberFormFieldWidget(
                         text: "PPN\t",
-                        controller: _taxController,
+                        controller: taxController,
                         suffixText: "%",
                         // autofocus: true,
                       ),
@@ -55,15 +55,15 @@ class TaxPage extends StatelessWidget {
                           ),
                           onPressed: () {
                             // Validate returns true if the form is valid, or false otherwise.
-                            if (_formKey.currentState!.validate()) {
+                            if (formKey.currentState!.validate()) {
                               if (state.taxes.isEmpty) {
                                 BlocProvider.of<TaxCubit>(context).mapTaxAdd(
-                                  tax: double.parse(_taxController.text),
+                                  tax: double.parse(taxController.text),
                                 );
                               } else {
                                 BlocProvider.of<TaxCubit>(context).mapTaxEdit(
                                   index: 0,
-                                  newTax: double.parse(_taxController.text),
+                                  newTax: double.parse(taxController.text),
                                 );
                               }
                             }

@@ -10,17 +10,17 @@ class CompanyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String _company = '';
-    final CompanyHive _companyHive = CompanyHive();
-    _getCompany() async {
-      await _companyHive
+    String company = '';
+    final CompanyHive companyHive = CompanyHive();
+    getCompany() async {
+      await companyHive
           .getFullCompanys()
-          .then((value) => _company = value.first.companyName);
-      return _company;
+          .then((value) => company = value.first.companyName);
+      return company;
     }
 
     return FutureBuilder(
-      future: _getCompany(),
+      future: getCompany(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           controller.text = snapshot.data.toString();

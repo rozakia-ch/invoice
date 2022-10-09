@@ -39,16 +39,16 @@ class PackagePage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   itemCount: state.packages.length,
                   itemBuilder: (context, index) {
-                    final PackageModel _package = state.packages[index];
+                    final PackageModel package = state.packages[index];
                     return Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: ListTile(
                         title: Text(
-                          '${_package.package} Mbps',
+                          '${package.package} Mbps',
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         subtitle: Text(
-                          CurrencyFormat.convertToIdr(_package.price, 0),
+                          CurrencyFormat.convertToIdr(package.price, 0),
                           style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
                         shape: RoundedRectangleBorder(
@@ -63,7 +63,7 @@ class PackagePage extends StatelessWidget {
                               arguments: {
                                 'newEntry': false,
                                 'index': index,
-                                'package': _package,
+                                'package': package,
                               },
                             );
                           },
@@ -73,7 +73,7 @@ class PackagePage extends StatelessWidget {
                           _showAlertDialog(
                             context,
                             index,
-                            '${_package.package} Mbps',
+                            '${package.package} Mbps',
                           );
                         },
                       ),
