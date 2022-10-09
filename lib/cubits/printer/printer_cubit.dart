@@ -46,6 +46,7 @@ class PrinterCubit extends Cubit<PrinterState> {
       if (isConnected!) {
         bluetooth.printNewLine();
         bluetooth.printCustom(company, 4, 1);
+        bluetooth.printCustom(company, 2, 1);
         bluetooth.printLeftRight(
           DateFormat(dateFormat).format(DateTime.now()),
           DateFormat(timeFormat).format(DateTime.now()),
@@ -66,27 +67,21 @@ class PrinterCubit extends Cubit<PrinterState> {
           CurrencyFormat.convertToIdr(tax / 100 * price, 0),
           1,
         );
-        if (debt > 0) {
-          bluetooth.printLeftRight(
-            'Hutang',
-            CurrencyFormat.convertToIdr(debt, 0),
-            1,
-          );
-        }
-        if (rentCost > 0) {
-          bluetooth.printLeftRight(
-            'Biaya Sewa',
-            CurrencyFormat.convertToIdr(rentCost, 0),
-            1,
-          );
-        }
-        if (discount > 0) {
-          bluetooth.printLeftRight(
-            'Diskon',
-            CurrencyFormat.convertToIdr(discount, 0),
-            1,
-          );
-        }
+        bluetooth.printLeftRight(
+          'Hutang',
+          CurrencyFormat.convertToIdr(debt, 0),
+          1,
+        );
+        bluetooth.printLeftRight(
+          'Biaya Sewa',
+          CurrencyFormat.convertToIdr(rentCost, 0),
+          1,
+        );
+        bluetooth.printLeftRight(
+          'Diskon',
+          CurrencyFormat.convertToIdr(discount, 0),
+          1,
+        );
         bluetooth.printLeftRight(
           'Total',
           CurrencyFormat.convertToIdr(
